@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactieve Oefening: Nederlandse Meervouden</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Stone, with Blue/Green accents) -->
+    <!-- Application Structure Plan: De applicatie is opgebouwd uit drie logische secties: 1. 'De Regels' met interactieve kaarten om de grammaticale concepten visueel te demonstreren. 2. 'Oefen Nu' als een interactieve quiz die directe, verklarende feedback geeft om het leerproces te versterken. 3. 'Woordenlijst' als een snelle referentietabel. Deze 'Leren, Oefenen, Herhalen'-structuur is didactisch effectiever voor een taalstudent dan een statische lijst, omdat het actieve betrokkenheid en herinnering bevordert. -->
+    <!-- Visualization & Content Choices: De grammaticale regels worden gepresenteerd als interactieve HTML/CSS-kaarten die de transformatie van enkelvoud naar meervoud visueel tonen (Doel: Informeren/Betrekken). De oefening is geïmplementeerd als een JavaScript-gestuurde quiz voor actieve herinnering en directe feedback (Doel: Testen/Versterken). Een eenvoudige HTML-tabel dient als naslagwerk (Doel: Samenvatten). Deze keuzes zijn gemaakt om de betrokkenheid en het leerrendement te maximaliseren. Er zijn geen grafieken nodig omdat de inhoud taalkundig is. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .feedback {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-stone-900">Nederlandse Meervouden Leren</h1>
+            <p class="mt-2 text-lg text-stone-600">Een interactieve gids voor de lastige regels.</p>
+        </header>
+
+        <!-- Sectie 1: De Regels -->
+        <section id="regels" class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 text-center">De Regels Begrijpen</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- Regel 1 Kaart -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-stone-200">
+                    <h3 class="font-bold text-lg mb-2 text-stone-800">Regel 1: Korte Klinker</h3>
+                    <p class="text-stone-600 mb-4">Een woord met een <strong>klinker</strong> en <strong>één medeklinker</strong> aan het einde krijgt een dubbele medeklinker in het meervoud.</p>
+                    <div class="text-center p-4 bg-stone-100 rounded-md">
+                        <p class="text-xl">bom <span class="font-bold text-blue-600">&rarr;</span> bommen</p>
+                        <p class="text-xl mt-2">zon <span class="font-bold text-blue-600">&rarr;</span> zonnen</p>
+                    </div>
+                </div>
+
+                <!-- Regel 2 Kaart -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-stone-200">
+                    <h3 class="font-bold text-lg mb-2 text-stone-800">Regel 2: Lange Klinker</h3>
+                    <p class="text-stone-600 mb-4">Een woord met een <strong>lange klinker</strong> en <strong>één medeklinker</strong> aan het einde verliest één klinker in het meervoud.</p>
+                     <div class="text-center p-4 bg-stone-100 rounded-md">
+                        <p class="text-xl">boom <span class="font-bold text-green-600">&rarr;</span> bomen</p>
+                        <p class="text-xl mt-2">zoon <span class="font-bold text-green-600">&rarr;</span> zonen</p>
+                    </div>
+                </div>
+
+                <!-- Regel 3 Kaart -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-stone-200">
+                    <h3 class="font-bold text-lg mb-2 text-stone-800">Regel 3: Uitzonderingen op -s</h3>
+                    <p class="text-stone-600 mb-4">Woorden die eindigen op <strong>-el, -er, -en,</strong> etc., krijgen vaak gewoon een <strong>-s</strong> in het meervoud.</p>
+                    <div class="text-center p-4 bg-stone-100 rounded-md">
+                        <p class="text-xl">lepel <span class="font-bold text-purple-600">&rarr;</span> lepels</p>
+                        <p class="text-xl mt-2">vogel <span class="font-bold text-purple-600">&rarr;</span> vogels</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sectie 2: Oefenen -->
+        <section id="oefenen" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg border border-stone-200">
+            <h2 class="text-2xl font-bold mb-2 text-center">Oefen Nu!</h2>
+            <p class="text-center text-stone-600 mb-6">Typ het meervoud van het volgende woord en druk op 'Controleer'.</p>
+
+            <div class="w-full bg-stone-200 rounded-full h-2.5 mb-6">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+
+            <div class="text-center mb-4">
+                <p class="text-stone-700">Wat is het meervoud van:</p>
+                <p id="singular-word" class="text-4xl font-bold my-2 text-blue-700"></p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+                <input type="text" id="plural-input" class="w-full sm:w-64 px-4 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Jouw antwoord...">
+                <button id="check-button" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-2 px-6 rounded-md hover:bg-blue-700 transition-colors">Controleer</button>
+            </div>
+            
+            <div id="feedback-container" class="mt-6 text-center text-lg min-h-[60px]">
+                <!-- Feedback wordt hier ingevoegd -->
+            </div>
+
+        </section>
+
+        <!-- Sectie 3: Woordenlijst -->
+        <section id="woordenlijst" class="mt-12">
+            <h2 class="text-2xl font-bold mb-4 text-center">Woordenlijst</h2>
+             <div class="max-w-md mx-auto overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-stone-200">
+                        <tr>
+                            <th class="p-3 font-bold uppercase text-stone-600 border border-stone-300">Enkelvoud</th>
+                            <th class="p-3 font-bold uppercase text-stone-600 border border-stone-300">Meervoud</th>
+                        </tr>
+                    </thead>
+                    <tbody id="word-table-body" class="bg-white">
+                        <!-- Woorden worden hier ingevoegd -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const words = [
+            { singular: 'bom', plural: 'bommen', rule: "De 'o' is kort, dus de medeklinker 'm' verdubbelt." },
+            { singular: 'zon', plural: 'zonnen', rule: "De 'o' is kort, dus de medeklinker 'n' verdubbelt." },
+            { singular: 'boom', plural: 'bomen', rule: "De 'oo' is lang, dus deze wordt een enkele 'o'." },
+            { singular: 'zoon', plural: 'zonen', rule: "De 'oo' is lang, dus deze wordt een enkele 'o'." },
+            { singular: 'lepel', plural: 'lepels', rule: "Woorden die eindigen op -el krijgen meestal een -s." },
+            { singular: 'vogel', plural: 'vogels', rule: "Woorden die eindigen op -el krijgen meestal een -s." },
+            { singular: 'pot', plural: 'potten', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'kat', plural: 'katten', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'hut', plural: 'hutten', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'pan', plural: 'pannen', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'vis', plural: 'vissen', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'mes', plural: 'messen', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'put', plural: 'putten', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'rok', plural: 'rokken', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'tak', plural: 'takken', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'bak', plural: 'bakken', rule: "De korte klinker zorgt ervoor dat de medeklinker verdubbelt." },
+            { singular: 'been', plural: 'benen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'muur', plural: 'muren', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'geit', plural: 'geiten', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'raam', plural: 'ramen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'neus', plural: 'neuzen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'dier', plural: 'dieren', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'huis', plural: 'huizen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'schaap', plural: 'schapen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'stoel', plural: 'stoelen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'bloem', plural: 'bloemen', rule: "De lange klinker wordt enkel geschreven in het meervoud." },
+            { singular: 'meter', plural: 'meters', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'kamer', plural: 'kamers', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'bakker', plural: 'bakkers', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'broer', plural: 'broers', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'zus', plural: 'zussen', rule: "Dit is een uitzondering die een dubbele medeklinker krijgt voor de -en." },
+            { singular: 'vader', plural: 'vaders', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'moeder', plural: 'moeders', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'dochter', plural: 'dochters', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'vinger', plural: 'vingers', rule: "Woorden die op -el, -er, -en, -ie, -je, -aar, -oor eindigen, krijgen vaak een -s." },
+            { singular: 'bril', plural: 'brillen', rule: "Dit volgt de regel van de korte klinker die de medeklinker verdubbelt." }
+        ];
+
+        let currentWordIndex = 0;
+
+        const singularWordEl = document.getElementById('singular-word');
+        const pluralInputEl = document.getElementById('plural-input');
+        const checkButton = document.getElementById('check-button');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const progressBar = document.getElementById('progress-bar');
+        const wordTableBody = document.getElementById('word-table-body');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function displayWord() {
+            if (currentWordIndex < words.length) {
+                singularWordEl.textContent = words[currentWordIndex].singular;
+                pluralInputEl.value = '';
+                pluralInputEl.focus();
+                feedbackContainer.innerHTML = '';
+            } else {
+                singularWordEl.textContent = 'Goed gedaan!';
+                pluralInputEl.style.display = 'none';
+                checkButton.textContent = 'Opnieuw';
+                checkButton.removeEventListener('click', checkAnswer);
+                checkButton.addEventListener('click', restartQuiz);
+                feedbackContainer.innerHTML = `<p class="text-green-700 font-semibold">Je hebt alle woorden gehad!</p>`;
+            }
+            updateProgressBar();
+        }
+        
+        function updateProgressBar() {
+            const progress = (currentWordIndex / words.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function checkAnswer() {
+            const userAnswer = pluralInputEl.value.trim().toLowerCase();
+            const correctAnswer = words[currentWordIndex].plural;
+            const explanation = words[currentWordIndex].rule;
+
+            let feedbackHTML = '';
+            if (userAnswer === correctAnswer) {
+                feedbackHTML = `<p class="text-green-700 font-semibold">Correct! <span class="font-normal text-stone-600">${explanation}</span></p>`;
+                currentWordIndex++;
+                setTimeout(displayWord, 1500);
+            } else {
+                feedbackHTML = `<p class="text-red-600 font-semibold">Bijna! Het juiste antwoord is '${correctAnswer}'. <span class="font-normal text-stone-600">${explanation}</span></p>`;
+                 setTimeout(() => {
+                    feedbackContainer.innerHTML = '';
+                 }, 3000);
+            }
+            feedbackContainer.innerHTML = feedbackHTML;
+        }
+        
+        function restartQuiz() {
+            currentWordIndex = 0;
+            shuffleArray(words);
+            pluralInputEl.style.display = 'block';
+            checkButton.textContent = 'Controleer';
+            checkButton.removeEventListener('click', restartQuiz);
+            checkButton.addEventListener('click', checkAnswer);
+            displayWord();
+        }
+        
+        function populateTable() {
+            words.forEach(word => {
+                const row = `
+                    <tr class="hover:bg-stone-50">
+                        <td class="p-3 border border-stone-300">${word.singular}</td>
+                        <td class="p-3 border border-stone-300">${word.plural}</td>
+                    </tr>
+                `;
+                wordTableBody.innerHTML += row;
+            });
+        }
+
+        pluralInputEl.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkButton.click();
+            }
+        });
+        
+        checkButton.addEventListener('click', checkAnswer);
+        
+        // Initial setup
+        shuffleArray(words);
+        displayWord();
+        populateTable();
+
+    </script>
+</body>
+</html>
